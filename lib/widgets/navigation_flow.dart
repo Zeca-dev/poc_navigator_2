@@ -24,12 +24,6 @@ class _NavigationFlowState extends State<NavigationFlow> {
   final title = ValueNotifier('');
 
   @override
-  void initState() {
-    super.initState();
-    title.value = widget.initialRoute;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return NavigatorPopHandler(
       onPop: () {
