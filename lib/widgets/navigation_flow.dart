@@ -37,6 +37,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
         appBar: PreferredSize(
           preferredSize: Size(MediaQuery.sizeOf(context).width, 80),
           child: ListenableBuilder(
+            listenable: title,
             builder: (context, child) => AppBar(
               title: Text(title.value),
               leading: _navigationRouteStack.length == 1 ? Container() : null,
@@ -48,7 +49,6 @@ class _NavigationFlowState extends State<NavigationFlow> {
                     icon: const Icon(Icons.close))
               ],
             ),
-            listenable: title,
           ),
         ),
         body: Navigator(
