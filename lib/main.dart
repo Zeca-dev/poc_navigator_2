@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:poc_navigator_2/constantes/routes.dart';
-import 'package:poc_navigator_2/conta/conta_page.dart';
+
 import 'package:poc_navigator_2/home/home_page.dart';
 
 void main() {
@@ -19,10 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      routes: {
-        Routes.home: (_) => const HomePage(),
-        Routes.conta: (_) => const ContaPage(),
-      },
+      home: const HomePage(),
     );
   }
 }

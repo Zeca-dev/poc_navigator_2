@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:poc_navigator_2/constantes/routes.dart';
 import 'package:poc_navigator_2/conta/cadastro_page.dart';
 import 'package:poc_navigator_2/conta/pagamento_page.dart';
@@ -16,13 +17,8 @@ class _ContaPageState extends State<ContaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (canPop) {
-        if (canPop) {
-          return;
-        }
-      },
+    return NavigatorPopHandler(
+      onPop: () => navigatorKey.currentState!.pop(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Conta'),
