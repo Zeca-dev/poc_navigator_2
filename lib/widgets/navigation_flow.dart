@@ -40,19 +40,22 @@ class _NavigationFlowState extends State<NavigationFlow> {
         _navigatorKey.currentState!.pop();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: ListenableBuilder(
-            builder: (context, child) => Text(title.value),
+        appBar: PreferredSize(
+          preferredSize: Size(MediaQuery.sizeOf(context).width, 80),
+          child: ListenableBuilder(
+            builder: (context, child) => AppBar(
+              title: Text(title.value),
+              leading: _navigationRouteStack.length == 1 ? Container() : null,
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.close))
+              ],
+            ),
             listenable: title,
           ),
-          // leading: Container(),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.close))
-          ],
         ),
         body: Navigator(
           key: _navigatorKey,
