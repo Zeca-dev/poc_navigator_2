@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'package:poc_navigator_2/widgets/navigationRoute.dart';
+
 class NavigationFlow extends StatefulWidget {
   const NavigationFlow({
     super.key,
-    required this.title,
     required this.initialRoute,
-    required this.routes,
+    required this.navigationRoutes,
   });
 
   final String initialRoute;
-
-  final Map<String, Widget> routes;
-
-  final String title;
+  final List<NavigationRoute> navigationRoutes;
 
   @override
   State<NavigationFlow> createState() => _NavigationFlowState();
@@ -21,18 +19,12 @@ class NavigationFlow extends StatefulWidget {
 class _NavigationFlowState extends State<NavigationFlow> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  final controllerTitle = TextEditingController();
+  final title = ValueNotifier('');
 
   @override
   void initState() {
     super.initState();
-    controllerTitle.text = widget.title;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controllerTitle.dispose();
+    title.value = widget.initialRoute;
   }
 
   @override
@@ -41,7 +33,10 @@ class _NavigationFlowState extends State<NavigationFlow> {
       onPop: () => _navigatorKey.currentState!.pop(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(controllerTitle.text),
+          title: ListenableBuilder(
+            builder: (context, child) => Text(title.value),
+            listenable: title,
+          ),
           // leading: Container(),
           actions: [
             IconButton(
@@ -62,15 +57,16 @@ class _NavigationFlowState extends State<NavigationFlow> {
               return null;
             }
 
-            Widget? destinationPage = widget.routes[route];
+            NavigationRoute? destinationRoute =
+                widget.navigationRoutes.where((r) => r.routeName == route).toList().firstOrNull;
 
-            if (destinationPage == null) {
+            if (destinationRoute == null) {
               return null;
             }
 
-            page = destinationPage;
-            //TODO: VER UMA FORMA DE DAR SETSTATE AQUI DENTRO
-            controllerTitle.text = 'Novo título';
+            page = destinationRoute.page;
+
+            title.value = destinationRoute.titleRoute;
 
             return PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) => page,
