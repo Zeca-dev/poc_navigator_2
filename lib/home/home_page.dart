@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
           //         )));
           Navigator.of(context).push(PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) => const NavigationFlow(
+                    title: 'Conta corrente',
                     initialRoute: '/cadastro',
                     routes: {
                       '/cadastro': CadastroPage(),
