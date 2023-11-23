@@ -22,6 +22,7 @@ class _ContaPageState extends State<ContaPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Conta'),
+          // leading: Container(),
           actions: [
             IconButton(
                 onPressed: () {
@@ -56,8 +57,6 @@ class _ContaPageState extends State<ContaPage> {
                       position: Tween(begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0)).animate(animation),
                       child: child,
                     ));
-
-            return MaterialPageRoute(builder: (context) => page, settings: settings);
           },
         ),
       ),
