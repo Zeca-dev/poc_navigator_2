@@ -23,12 +23,6 @@ class _HomePageState extends State<HomePage> {
       body: Center(
           child: ElevatedButton(
         onPressed: () {
-          // Navigator.of(context).push(PageRouteBuilder(
-          //     pageBuilder: (context, animation, secondaryAnimation) => const ContaPage(),
-          //     transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
-          //           position: Tween(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation),
-          //           child: child,
-          //         )));
           Navigator.of(context).push(PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) => NavigationFlow(
                     initialRoute: '/cadastro',

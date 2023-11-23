@@ -19,6 +19,8 @@ class NavigationFlow extends StatefulWidget {
 class _NavigationFlowState extends State<NavigationFlow> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
+  final _navigationRouteStack = <NavigationRoute>[];
+
   final title = ValueNotifier('');
 
   @override
@@ -30,7 +32,13 @@ class _NavigationFlowState extends State<NavigationFlow> {
   @override
   Widget build(BuildContext context) {
     return NavigatorPopHandler(
-      onPop: () => _navigatorKey.currentState!.pop(),
+      onPop: () {
+        if (_navigationRouteStack.isNotEmpty) {
+          _navigationRouteStack.removeLast();
+          title.value = _navigationRouteStack.last.titleRoute;
+        }
+        _navigatorKey.currentState!.pop();
+      },
       child: Scaffold(
         appBar: AppBar(
           title: ListenableBuilder(
@@ -67,6 +75,10 @@ class _NavigationFlowState extends State<NavigationFlow> {
             page = destinationRoute.page;
 
             title.value = destinationRoute.titleRoute;
+
+            if (!_navigationRouteStack.contains(destinationRoute)) {
+              _navigationRouteStack.add(destinationRoute);
+            }
 
             return PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) => page,
