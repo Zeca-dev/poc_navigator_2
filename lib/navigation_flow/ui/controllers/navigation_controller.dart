@@ -11,6 +11,8 @@ import 'package:poc_navigator_2/navigation_flow/domain/navigation_route.dart';
 /// [NavigationFlow] terá uma instância interna de [NavigatrionController],
 /// a qual sempre utilizará os títulos de rota `fixos`,
 /// fornecidos em cada `navigationRoute` da lista [navigationRoutes].
+///
+///
 class NavigationController extends ValueNotifier<_NavigationState> {
   NavigationController() : super(_NavigationState(titlePage: '', navigationRouteStack: []));
 
