@@ -57,10 +57,13 @@ class _NavigationFlowState extends State<NavigationFlow> {
   void initState() {
     super.initState();
     _controller = widget.controller ?? NavigationController();
+    _controller.value.navigationRouteStack.clear();
 
     final initialRoute = _getRouteByName(widget.initialRoute);
     _controller.setTitlePage(initialRoute?.titlePage ?? '');
   }
+
+  //TODO: VERIFICAR COMO DAR DISPOSE SEM QUEBRAR O CONTROLLER.
 
   @override
   Widget build(BuildContext context) {

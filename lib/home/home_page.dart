@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
           child: ElevatedButton(
         onPressed: () {
-          final controller = autoInector.get<NavigationController>();
+          final controller = autoInector.tryGet<NavigationController>() ?? NavigationController();
 
           Navigator.of(context).push(
             SlideBottomToUp(
