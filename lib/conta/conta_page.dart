@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:poc_navigator_2/constantes/routes.dart';
 import 'package:poc_navigator_2/conta/cadastro_page.dart';
 import 'package:poc_navigator_2/conta/pagamento_page.dart';
@@ -28,7 +27,8 @@ class _ContaPageState extends State<ContaPage> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                icon: const Icon(Icons.close))
+                icon: const Icon(Icons.close)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.save))
           ],
         ),
         body: Navigator(
