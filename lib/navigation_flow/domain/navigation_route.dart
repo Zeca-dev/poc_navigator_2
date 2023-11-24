@@ -9,7 +9,8 @@ class NavigationRoute {
     required this.page,
     this.transitionType = AppTransitionType.SLIDE_RIGHT_TO_LEFT,
     this.transitionsBuilder,
-  })  : assert(!(transitionType == AppTransitionType.CUSTOM_TRANSITION && transitionsBuilder == null),
+  })  : assert(routeName.startsWith('/'), r'É necessário passar um nome de rota que comece com /'),
+        assert(!(transitionType == AppTransitionType.CUSTOM_TRANSITION && transitionsBuilder == null),
             'Se a transição for custumizada é OBRIGATÓRIO passar o transitionBuilder!'),
         assert(!(transitionType != AppTransitionType.CUSTOM_TRANSITION && transitionsBuilder != null),
             'Se a transição NÁO FOR CUSTOMIZADA náo se deve passar o transitionBuilder!');

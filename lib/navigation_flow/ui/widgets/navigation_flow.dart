@@ -90,7 +90,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
         ),
         body: Navigator(
           key: _navigatorKey,
-          initialRoute: widget.initialRoute,
+          initialRoute: widget.initialRoute.isNotEmpty ? widget.initialRoute : widget.navigationRoutes.first.routeName,
           onGenerateRoute: (settings) {
             var route = settings.name;
             Widget page;
