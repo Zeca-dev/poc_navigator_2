@@ -1,7 +1,7 @@
 import 'package:auto_injector/auto_injector.dart';
 import 'package:flutter/material.dart';
 import 'package:poc_navigator_2/home/home_page.dart';
-import 'package:poc_navigator_2/navigator_flow/ui/controllers/navigation_controller.dart';
+import 'package:poc_navigator_2/navigation_flow/ui/controllers/navigation_controller.dart';
 
 final autoInector = AutoInjector();
 

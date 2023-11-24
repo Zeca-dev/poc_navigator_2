@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poc_navigator_2/main.dart';
-import 'package:poc_navigator_2/navigator_flow/ui/controllers/navigation_controller.dart';
+import 'package:poc_navigator_2/navigation_flow/ui/controllers/navigation_controller.dart';
 
 class TransferenciaPage extends StatefulWidget {
   const TransferenciaPage({super.key});
