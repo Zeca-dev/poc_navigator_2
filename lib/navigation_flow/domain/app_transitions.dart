@@ -25,6 +25,7 @@ class SlideRightToLeft extends PageRouteBuilder {
   SlideRightToLeft({
     required this.page,
     this.duration = const Duration(milliseconds: 300),
+    super.settings,
   }) : super(
           pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
             return page;
@@ -51,6 +52,7 @@ class SlideLeftToRight extends PageRouteBuilder {
 
   SlideLeftToRight({
     required this.page,
+    super.settings,
     this.duration = const Duration(milliseconds: 300),
   }) : super(
             pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -77,6 +79,7 @@ class SlideBottomToUp extends PageRouteBuilder {
 
   SlideBottomToUp({
     required this.page,
+    super.settings,
     this.duration = const Duration(milliseconds: 300),
   }) : super(
             pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -105,6 +108,7 @@ class CustomTransition extends PageRouteBuilder {
   CustomTransition({
     required this.page,
     required this.transition,
+    super.settings,
     this.duration = const Duration(milliseconds: 300),
   }) : super(
           pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {

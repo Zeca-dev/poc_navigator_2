@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:poc_navigator_2/constantes/app_routes.dart';
+import 'package:poc_navigator_2/main.dart';
+import 'package:poc_navigator_2/navigation_flow/domain/extensions/context_extensions.dart';
+import 'package:poc_navigator_2/navigation_flow/ui/controllers/navigation_controller.dart';
 
 class PagamentoPage extends StatefulWidget {
   const PagamentoPage({super.key});
@@ -8,13 +12,23 @@ class PagamentoPage extends StatefulWidget {
 }
 
 class _PagamentoPageState extends State<PagamentoPage> {
+  final controller = autoInector.get<NavigationController>();
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final texto = AppRoutes.getArgs<String>(context);
+      controller.setTitlePage('Pagamento de $texto');
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
           child: ElevatedButton(
-        onPressed: () {
-          Navigator.of(context, rootNavigator: true).pop();
+        onPressed: () async {
+          context.pop(rootNavigator: true);
         },
         child: const Text('Sair'),
       )),
