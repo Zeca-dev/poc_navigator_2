@@ -3,11 +3,9 @@ import 'package:poc_navigator_2/constantes/app_routes.dart';
 import 'package:poc_navigator_2/conta/cadastro_page.dart';
 import 'package:poc_navigator_2/conta/pagamento_page.dart';
 import 'package:poc_navigator_2/conta/transferencia_page.dart';
-import 'package:poc_navigator_2/main.dart';
 import 'package:poc_navigator_2/navigation_flow/domain/app_transitions.dart';
 import 'package:poc_navigator_2/navigation_flow/domain/extensions/context_extensions.dart';
 import 'package:poc_navigator_2/navigation_flow/domain/navigation_route.dart';
-import 'package:poc_navigator_2/navigation_flow/ui/controllers/navigation_controller.dart';
 import 'package:poc_navigator_2/navigation_flow/ui/widgets/navigation_flow.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,12 +26,9 @@ class _HomePageState extends State<HomePage> {
       body: Center(
           child: ElevatedButton(
         onPressed: () {
-          final controller = autoInector.tryGet<NavigationController>() ?? NavigationController();
-
           context.push(
             SlideBottomToUp(
               page: NavigationFlow(
-                controller: controller,
                 initialRoute: AppRoutes.cadastro,
                 navigationRoutes: [
                   NavigationRoute(

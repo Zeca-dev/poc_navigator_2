@@ -9,13 +9,12 @@ class NavigationFlow extends StatefulWidget {
   ///contém uma rota inicial [initialRoute] e uma
   /// lista de rotas navegáveis [navigationRoutes].
   ///
-  const NavigationFlow(
-      {super.key,
-      required this.initialRoute,
-      required this.navigationRoutes,
-      this.transitionDuration = const Duration(milliseconds: 300),
-      this.controller})
-      : assert(navigationRoutes.length > 1, 'A pilha [navigationRoutes] deve ter pelo menos duas rotas!');
+  const NavigationFlow({
+    super.key,
+    required this.initialRoute,
+    required this.navigationRoutes,
+    this.transitionDuration = const Duration(milliseconds: 300),
+  }) : assert(navigationRoutes.length > 1, 'A pilha [navigationRoutes] deve ter pelo menos duas rotas!');
 
   ///Rota onde o fluxo de navegação inicia.
   /// Caso [initialRoute] não seja fornecida, será usada a primeira
@@ -37,13 +36,9 @@ class NavigationFlow extends StatefulWidget {
   /// Contém uma `navigationRouteStack` que guarda as rotas
   /// do fluxo atual. Este [controller] também é usado para
   /// alterar o título das páginas do fluxo em qualquer parte
-  /// do mesmo, desde que receba uma instância global `singleton`
-  /// de [NavigationController]. Caso não seja fornecido, o
-  /// [NavigationFlow] terá uma instância interna de [NavigatrionController],
-  /// a qual sempre utilizará os títulos de rota `fixos`,
-  /// fornecidos em cada `navigationRoute` da lista [navigationRoutes].
+  /// do mesmo.
   ///
-  final NavigationController? controller;
+  static NavigationController controller = NavigationController();
 
   @override
   State<NavigationFlow> createState() => _NavigationFlowState();
@@ -55,15 +50,22 @@ class _NavigationFlowState extends State<NavigationFlow> {
 
   @override
   void initState() {
-    super.initState();
-    _controller = widget.controller ?? NavigationController();
+    NavigationFlow.controller = NavigationController();
+
+    _controller = NavigationFlow.controller;
     _controller.value.navigationRouteStack.clear();
 
     final initialRoute = _getRouteByName(widget.initialRoute);
     _controller.setTitlePage(initialRoute?.titlePage ?? '');
+
+    super.initState();
   }
 
-  //TODO: VERIFICAR COMO DAR DISPOSE SEM QUEBRAR O CONTROLLER.
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

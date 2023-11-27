@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poc_navigator_2/constantes/app_routes.dart';
-import 'package:poc_navigator_2/main.dart';
 import 'package:poc_navigator_2/navigation_flow/domain/extensions/context_extensions.dart';
-import 'package:poc_navigator_2/navigation_flow/ui/controllers/navigation_controller.dart';
+import 'package:poc_navigator_2/navigation_flow/ui/widgets/navigation_flow.dart';
 
 class TransferenciaPage extends StatefulWidget {
   const TransferenciaPage({super.key});
@@ -12,8 +11,6 @@ class TransferenciaPage extends StatefulWidget {
 }
 
 class _TransferenciaPageState extends State<TransferenciaPage> {
-  final controller = autoInector.get<NavigationController>();
-
   late String texto;
 
   @override
@@ -34,7 +31,7 @@ class _TransferenciaPageState extends State<TransferenciaPage> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                controller.setTitlePage('NOVO TÍTULO');
+                NavigationFlow.controller.setTitlePage('NOVO TÍTULO');
               },
               child: const Text('Alterar título'),
             ),
