@@ -19,7 +19,7 @@ class NavigationController extends ValueNotifier<_NavigationState> {
   ///Adiciona uma [route] à [navigationRouteStack] se a mesma
   ///aidna não estiver na pilha.
   ///
-  addRoute(NavigationRoute route) {
+  void addRoute(NavigationRoute route) {
     if (!value.navigationRouteStack.contains(route)) {
       value.navigationRouteStack.add(route);
     }
@@ -28,7 +28,7 @@ class NavigationController extends ValueNotifier<_NavigationState> {
 
   ///Remove uma rota da [navigationRouteStack].
   ///
-  removeRoute() {
+  void removeRoute() {
     if (value.navigationRouteStack.isNotEmpty) {
       value.navigationRouteStack.removeLast();
       setTitlePage(value.navigationRouteStack.last.titlePage);
@@ -37,7 +37,7 @@ class NavigationController extends ValueNotifier<_NavigationState> {
 
   ///Define o [tile] para a [page] atual da rota.
   ///
-  setTitlePage(String title) {
+  void setTitlePage(String title) {
     value = value.copyWith(titlePage: title);
   }
 }

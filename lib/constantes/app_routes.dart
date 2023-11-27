@@ -21,12 +21,4 @@ final class AppRoutes {
   static const transferencia = '/transferencia';
   static const pagamento = '/pagamento';
   static const text = '/text';
-
-  ///Recupera um argumento [argument] passado em uma rota.
-  /// Se não for passado nenhum argumento o valor será [Null].
-  ///
-  static T? getArgs<T extends Object?>(BuildContext context) {
-    final argument = ModalRoute.of(context)?.settings.arguments as T?;
-    return argument;
-  }
 }

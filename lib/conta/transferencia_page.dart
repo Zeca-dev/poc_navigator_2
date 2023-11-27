@@ -15,7 +15,7 @@ class _TransferenciaPageState extends State<TransferenciaPage> {
 
   @override
   Widget build(BuildContext context) {
-    texto = AppRoutes.getArgs<String>(context) ?? '';
+    texto = context.getArgs<String>() ?? '';
 
     return Scaffold(
       body: Center(

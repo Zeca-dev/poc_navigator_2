@@ -10,7 +10,7 @@ typedef AppTransition = Widget Function(
 ///Tipos de transição de rota.
 ///
 enum AppTransitionType {
-  SLIDE_BOTTOM_TO_UO,
+  SLIDE_BOTTOM_TO_UP,
   SLIDE_LEFT_TO_RIGHT,
   SLIDE_RIGHT_TO_LEFT,
   CUSTOM_TRANSITION,

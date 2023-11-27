@@ -64,6 +64,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
   @override
   void dispose() {
     _controller.dispose();
+    NavigationController().dispose();
     super.dispose();
   }
 
@@ -114,7 +115,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
             page = destinationRoute.page;
 
             return switch (destinationRoute.transitionType) {
-              AppTransitionType.SLIDE_BOTTOM_TO_UO => SlideBottomToUp(
+              AppTransitionType.SLIDE_BOTTOM_TO_UP => SlideBottomToUp(
                   settings: settings,
                   page: page,
                   duration: widget.transitionDuration,

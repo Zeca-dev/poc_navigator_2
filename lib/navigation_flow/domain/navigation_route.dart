@@ -40,7 +40,7 @@ class NavigationRoute {
 
   ///Tipo de transição de rota. Define o tipo de animação de rota.
   /// Opções:
-  /// [AppTransitionType.SLIDE_BOTTOM_TO_UO]
+  /// [AppTransitionType.SLIDE_BOTTOM_TO_UP]
   /// [AppTransitionType.SLIDE_LEFT_TO_RIGHT]
   /// [AppTransitionType.SLIDE_RIGHT_TO_LEFT]
   /// [AppTransitionType.CUSTOM_TRANSITION]
