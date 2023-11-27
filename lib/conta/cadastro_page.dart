@@ -11,6 +11,8 @@ class CadastroPage extends StatefulWidget {
 class _CadastroPageState extends State<CadastroPage> {
   @override
   Widget build(BuildContext context) {
+    final texto = AppRoutes.getArgs<String>(context);
+    print(texto);
     return Scaffold(
       body: Center(
           child: ElevatedButton(
