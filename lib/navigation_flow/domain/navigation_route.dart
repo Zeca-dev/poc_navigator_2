@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:poc_navigator_2/navigation_flow/domain/app_transitions.dart';
 
@@ -46,4 +47,20 @@ class NavigationRoute {
   /// [AppTransitionType.CUSTOM_TRANSITION]
   ///
   final AppTransitionType transitionType;
+
+  NavigationRoute copyWith({
+    String? routeName,
+    String? titlePage,
+    Widget? page,
+    AppTransition? transitionsBuilder,
+    AppTransitionType? transitionType,
+  }) {
+    return NavigationRoute(
+      routeName: routeName ?? this.routeName,
+      titlePage: titlePage ?? this.titlePage,
+      page: page ?? this.page,
+      transitionsBuilder: transitionsBuilder ?? this.transitionsBuilder,
+      transitionType: transitionType ?? this.transitionType,
+    );
+  }
 }

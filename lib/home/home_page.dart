@@ -31,8 +31,7 @@ class _HomePageState extends State<HomePage> {
                 page: NavigationFlow(
                   initialRoute: AppRoutes.cadastro,
                   navigationRoutes: [
-                    NavigationRoute(
-                        routeName: AppRoutes.cadastro, titlePage: 'Conta corrente', page: const CadastroPage()),
+                    NavigationRoute(routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),
                     NavigationRoute(
                       routeName: AppRoutes.transferencia,
                       titlePage: 'Transferência',
