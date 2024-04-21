@@ -14,12 +14,12 @@ class NavigationFlow extends StatefulWidget {
   const NavigationFlow({
     super.key,
     this.appBarEnabled = true,
-    required this.initialRoute,
+    this.initialRoute,
     required this.navigationRoutes,
     this.transitionDuration = const Duration(milliseconds: 300),
   }) : assert(navigationRoutes.length > 1, 'A pilha [navigationRoutes] deve ter pelo menos duas rotas!');
 
-  /// Define se a AppBar estará habilitada.
+  /// Define se a AppBar será exibida.
   ///
   final bool appBarEnabled;
 
@@ -27,7 +27,7 @@ class NavigationFlow extends StatefulWidget {
   /// Caso [initialRoute] não seja fornecida, será usada a primeira
   /// rota contida em [navigationRoutes].
   ///
-  final String initialRoute;
+  final String? initialRoute;
 
   ///Lista de Rotas que compõem o fluxo de navegação.
   /// Deve conter pelo menos duas rotas.
@@ -66,6 +66,7 @@ class NavigationFlow extends StatefulWidget {
 class _NavigationFlowState extends State<NavigationFlow> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   late _NavigationFlowController _internalController;
+  late NavigationRoute _initialRoute;
 
   @override
   void initState() {
@@ -74,10 +75,9 @@ class _NavigationFlowState extends State<NavigationFlow> {
     NavigationFlow._controllers.add(controller);
 
     _internalController = NavigationFlow._controllers.last;
-    // _internalController.value.navigationRouteStack.clear();
 
-    final initialRoute = _getRouteByName(widget.initialRoute);
-    _internalController.setTitlePage(initialRoute?.titlePage ?? widget.navigationRoutes.first.titlePage);
+    _initialRoute = _getRouteByName(_getInitialRouteName()) ?? widget.navigationRoutes.first;
+    _internalController.setTitlePage(_initialRoute.titlePage);
 
     super.initState();
   }
@@ -93,7 +93,18 @@ class _NavigationFlowState extends State<NavigationFlow> {
       .where((r) => r.routeName == routeName)
       .toList()
       .firstOrNull;
-  // widget.navigationRoutes.where((r) => r.routeName == routeName).toList().firstOrNull;
+
+  String _getInitialRouteName() {
+    switch (widget.initialRoute) {
+      case null:
+        return widget.navigationRoutes.first.routeName;
+      case _:
+        if (widget.initialRoute!.isEmpty) {
+          return widget.navigationRoutes.first.routeName;
+        }
+        return widget.initialRoute!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +139,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
           //
           body: Navigator(
             key: _navigatorKey,
-            initialRoute:
-                widget.initialRoute.isNotEmpty ? widget.initialRoute : widget.navigationRoutes.first.routeName,
+            initialRoute: _initialRoute.routeName,
             onGenerateRoute: (settings) {
               var route = settings.name;
               Widget page;

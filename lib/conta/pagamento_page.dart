@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:poc_navigator_2/conta/cadastro_page.dart';
 import 'package:poc_navigator_2/conta/transferencia_page.dart';
 import 'package:poc_navigator_2/main.dart';
@@ -39,7 +40,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
                 context.push(
                   rootNavigator: true,
                   SlideBottomToUp(
-                    page: NavigationFlow(initialRoute: '/cadastro', navigationRoutes: [
+                    page: NavigationFlow(appBarEnabled: false, initialRoute: '/cadastro', navigationRoutes: [
                       NavigationRoute(
                           routeName: AppRoutes.cadastro, titlePage: 'Novo Cadastro', page: const CadastroPage()),
                       NavigationRoute(
@@ -69,7 +70,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                controllerTeste.pushNamed(AppRoutes.pagamento);
+                context.pushNamed(AppRoutes.pagamento);
               },
               child: const Text('Teste 2'),
             ),
