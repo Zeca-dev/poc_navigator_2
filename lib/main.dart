@@ -16,20 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'POC Navigator 2.0',
       navigatorKey: navigatorKey,
-      // builder: (context, widget) => DialogManager(
-      //   NavigationFlow(
-      //     appBarEnabled: false,
-      //     initialRoute: AppRoutes.initialRoute,
-      //     navigationRoutes: [
-      //       NavigationRoute(routeName: AppRoutes.initialRoute, titlePage: 'Início', page: widget!),
-      //       NavigationRoute(
-      //         routeName: '/page2',
-      //         titlePage: 'page2',
-      //         page: Container(),
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      builder: (context, widget) => DialogManager(widget!),
+
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

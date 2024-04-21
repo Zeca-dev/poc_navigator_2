@@ -21,8 +21,9 @@ class _PagamentoPageState extends State<PagamentoPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final texto = context.getArgs<String>() ?? '';
-      NavigationFlow.setTitlePage('Pagamento de $texto');
+      final texto = context.getArgs<String>() ?? NavigationFlow.currentRoute().titlePage;
+
+      NavigationFlow.setTitlePage(texto);
     });
     super.initState();
   }

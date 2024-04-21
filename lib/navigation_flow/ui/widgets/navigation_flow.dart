@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../../domain/app_transitions.dart';
@@ -49,18 +47,17 @@ class NavigationFlow extends StatefulWidget {
   ///
   static final List<_NavigationFlowController> _controllers = [];
 
+  ///Retorna a [NavigationRoute] atual do fluxo.
+  /// Retorna [initialRoute] caso a pilha esteja vazia.
+  ///
+  static NavigationRoute currentRoute() => _controllers.last.currentRoute();
+
   /// Atualiza o títiulo [title] de uma página do fluxo de navvegação.
   /// Utilize [setTitlePage] apenas em views que estão dentro de um fluxo de
   /// navegação [NavigationFlow].
   ///
   ///
-  static void setTitlePage(String title) {
-    try {
-      _controllers.last.setTitlePage(title);
-    } catch (error) {
-      log('Utilize setTitle apenas em views que estão dentro de um NavigationFlow.');
-    }
-  }
+  static void setTitlePage(String title) => _controllers.last.setTitlePage(title);
 
   @override
   State<NavigationFlow> createState() => _NavigationFlowState();
@@ -117,7 +114,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
                       automaticallyImplyLeading: state.navigationRouteStack.length > 1,
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
-                      title: Text(state.titlePage),
+                      title: Text(state.navigationRouteStack.last.titlePage),
                       actions: [
                         IconButton(
                           onPressed: () => Navigator.of(context).pop(),

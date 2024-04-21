@@ -33,7 +33,7 @@ class _TransferenciaPageState extends State<TransferenciaPage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                context.pushNamed(AppRoutes.pagamento, arguments: 'Boleto bancário');
+                context.pushNamed(AppRoutes.pagamento, arguments: 'Pagamento de Boleto bancário');
               },
               child: Text('Ir para pagamento: $texto'),
             ),

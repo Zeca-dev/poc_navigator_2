@@ -24,16 +24,24 @@ class _NavigationFlowController extends ValueNotifier<_NavigationState> {
     }
   }
 
+  ///Retorna a [NavigationRoute] atual do fluxo.
+  /// Retorna [initialRoute] caso a pilha esteja vazia.
+  ///
+  NavigationRoute currentRoute() {
+    if (value.navigationRouteStack.isNotEmpty) {
+      return value.navigationRouteStack.last;
+    }
+    return value.navigationRoutes.first;
+  }
+
   ///Define o [title] para a [page] atual da rota.
   ///
   void setTitlePage(String title) {
     if (value.navigationRouteStack.isNotEmpty) {
-      List<NavigationRoute> stack = value.navigationRouteStack;
-      final route = stack.last.copyWith(titlePage: title);
-      stack.removeLast();
-      stack.add(route);
-
-      value = value.copyWith(titlePage: title, navigationRouteStack: stack);
+      final route = currentRoute().copyWith(titlePage: title);
+      value.navigationRouteStack.removeLast();
+      value.navigationRouteStack.add(route);
+      value = value.copyWith(titlePage: title);
     } else {
       value = value.copyWith(titlePage: title);
     }
@@ -41,6 +49,7 @@ class _NavigationFlowController extends ValueNotifier<_NavigationState> {
 }
 
 ///Representa o estado de uma navegação no [NavigationFlow].
+///
 class _NavigationState {
   ///Lista de [navigationRoutes] do fluxo atual.
   ///
