@@ -1,7 +1,5 @@
+import 'package:app_utils/app_utils.dart';
 import 'package:flutter/material.dart';
-
-import '../../domain/app_transitions.dart';
-import '../../domain/navigation_route.dart';
 
 part '../controllers/navigation_flow_controller.dart';
 
@@ -17,6 +15,7 @@ class NavigationFlow extends StatefulWidget {
     this.initialRoute,
     required this.navigationRoutes,
     this.transitionDuration = const Duration(milliseconds: 300),
+    this.onCloseMethod,
   }) : assert(navigationRoutes.length > 1, 'A pilha [navigationRoutes] deve ter pelo menos duas rotas!');
 
   /// Define se a AppBar será exibida.
@@ -59,6 +58,23 @@ class NavigationFlow extends StatefulWidget {
   ///
   static void setTitlePage(String title) => _controllers.last.setTitlePage(title);
 
+  /// Remove todas as rotas da stack até parar em [routeName].
+  ///
+  /// Caso a [routeName] não exista no NavigationFlow irá retornar um ArgumentError.
+  ///
+  static void backToRoute(String routeName) {
+    final route = _getRouteByName(routeName);
+    if (route == null) {
+      throw ArgumentError('A Rota "$routeName" não existe neste NavigationFlow!');
+    }
+
+    _controllers.last.removeRoutesUntil(routeName);
+  }
+
+  /// Método executado ao clicar no botão de fechar.
+  ///
+  final Future<bool> Function()? onCloseMethod;
+
   @override
   State<NavigationFlow> createState() => _NavigationFlowState();
 }
@@ -71,6 +87,8 @@ class _NavigationFlowState extends State<NavigationFlow> {
   @override
   void initState() {
     final controller = _NavigationFlowController();
+    controller.value.navigatorKey = _navigatorKey;
+
     controller.value.navigationRoutes.addAll(widget.navigationRoutes);
     NavigationFlow._controllers.add(controller);
 
@@ -89,11 +107,6 @@ class _NavigationFlowState extends State<NavigationFlow> {
     super.dispose();
   }
 
-  NavigationRoute? _getRouteByName(String routeName) => NavigationFlow._controllers.last.value.navigationRoutes
-      .where((r) => r.routeName == routeName)
-      .toList()
-      .firstOrNull;
-
   String _getInitialRouteName() {
     switch (widget.initialRoute) {
       case null:
@@ -108,10 +121,21 @@ class _NavigationFlowState extends State<NavigationFlow> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigatorPopHandler(
-      onPop: () {
-        _internalController.removeFromStack();
-        _navigatorKey.currentState!.pop();
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) {
+          return;
+        }
+
+        if (_internalController.value.navigationRouteStack.length == 1) {
+          Navigator.of(context).pop();
+
+          return;
+        } else {
+          _internalController.removeFromStack();
+          _navigatorKey.currentState!.pop();
+        }
       },
       child: SafeArea(
         child: Scaffold(
@@ -123,12 +147,25 @@ class _NavigationFlowState extends State<NavigationFlow> {
                     valueListenable: _internalController,
                     builder: (context, state, child) => AppBar(
                       automaticallyImplyLeading: state.navigationRouteStack.length > 1,
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).primaryColor,
+                      foregroundColor: Theme.of(context).appBarTheme.foregroundColor ?? Colors.white,
+                      centerTitle: false,
                       title: Text(state.navigationRouteStack.last.titlePage),
                       actions: [
                         IconButton(
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () async {
+                            if (widget.onCloseMethod == null) {
+                              Navigator.of(context).pop();
+                              return;
+                            }
+
+                            final result = await widget.onCloseMethod!.call();
+                            if (result) {
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            }
+                          },
                           icon: const Icon(Icons.close),
                         ),
                       ],
@@ -158,22 +195,22 @@ class _NavigationFlowState extends State<NavigationFlow> {
               page = destinationRoute.page;
 
               return switch (destinationRoute.transitionType) {
-                AppTransitionType.SLIDE_BOTTOM_TO_UP => SlideBottomToUp(
+                AppTransitionType.slideBottomToUp => SlideBottomToUp(
                     settings: settings,
                     page: page,
                     duration: widget.transitionDuration,
                   ),
-                AppTransitionType.SLIDE_RIGHT_TO_LEFT => SlideRightToLeft(
+                AppTransitionType.slideRightToLeft => SlideRightToLeft(
                     settings: settings,
                     page: page,
                     duration: widget.transitionDuration,
                   ),
-                AppTransitionType.SLIDE_LEFT_TO_RIGHT => SlideLeftToRight(
+                AppTransitionType.slideLeftToRight => SlideLeftToRight(
                     settings: settings,
                     page: page,
                     duration: widget.transitionDuration,
                   ),
-                AppTransitionType.CUSTOM_TRANSITION => CustomTransition(
+                AppTransitionType.customTransition => CustomTransition(
                     settings: settings,
                     page: page,
                     duration: widget.transitionDuration,
@@ -187,3 +224,6 @@ class _NavigationFlowState extends State<NavigationFlow> {
     );
   }
 }
+
+NavigationRoute? _getRouteByName(String routeName) =>
+    NavigationFlow._controllers.last.value.navigationRoutes.where((r) => r.routeName == routeName).toList().firstOrNull;
