@@ -46,6 +46,19 @@ class _NavigationFlowController extends ValueNotifier<_NavigationState> {
       value = value.copyWith(titlePage: title);
     }
   }
+
+  ///Chama [pop] repetidamente, removendo rotas da stack, até parar em [routeName].
+  ///
+  void removeRoutesUntil(String routeName) {
+    value.navigatorKey?.currentState?.popUntil(
+      (route) {
+        if (route.settings.name != routeName) {
+          removeFromStack();
+        }
+        return route.settings.name == routeName;
+      },
+    );
+  }
 }
 
 ///Representa o estado de uma navegação no [NavigationFlow].
@@ -63,21 +76,27 @@ class _NavigationState {
   ///
   final String titlePage;
 
+  /// Navigator Key utilizada para recursos de navegação dentro do NavigationFlowController.
+  ///
+  GlobalKey<NavigatorState>? navigatorKey;
+
   _NavigationState({
     required this.titlePage,
     required this.navigationRoutes,
     required this.navigationRouteStack,
+    this.navigatorKey,
   });
 
-  _NavigationState copyWith({
-    List<NavigationRoute>? navigationRoutes,
-    List<NavigationRoute>? navigationRouteStack,
-    String? titlePage,
-  }) {
+  _NavigationState copyWith(
+      {List<NavigationRoute>? navigationRoutes,
+      List<NavigationRoute>? navigationRouteStack,
+      String? titlePage,
+      GlobalKey<NavigatorState>? navigatorKey}) {
     return _NavigationState(
       navigationRoutes: navigationRoutes ?? this.navigationRoutes,
       navigationRouteStack: navigationRouteStack ?? this.navigationRouteStack,
       titlePage: titlePage ?? this.titlePage,
+      navigatorKey: navigatorKey ?? this.navigatorKey,
     );
   }
 }
