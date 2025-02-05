@@ -198,22 +198,22 @@ class _NavigationFlowState extends State<NavigationFlow> {
             page = destinationRoute.page;
 
             return switch (destinationRoute.transitionType) {
-              AppTransitionType.SLIDE_BOTTOM_TO_UP => SlideBottomToUp(
+              AppTransitionType.slideBottomToUp => SlideBottomToUp(
                   settings: settings,
                   page: page,
                   duration: widget.transitionDuration,
                 ),
-              AppTransitionType.SLIDE_RIGHT_TO_LEFT => SlideRightToLeft(
+              AppTransitionType.slideRightToLeft => SlideRightToLeft(
                   settings: settings,
                   page: page,
                   duration: widget.transitionDuration,
                 ),
-              AppTransitionType.SLIDE_LEFT_TO_RIGHT => SlideLeftToRight(
+              AppTransitionType.slideLeftToRight => SlideLeftToRight(
                   settings: settings,
                   page: page,
                   duration: widget.transitionDuration,
                 ),
-              AppTransitionType.CUSTOM_TRANSITION => CustomTransition(
+              AppTransitionType.customTransition => CustomTransition(
                   settings: settings,
                   page: page,
                   duration: widget.transitionDuration,
