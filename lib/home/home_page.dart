@@ -41,15 +41,11 @@ class _HomePageState extends State<HomePage> {
                           routeName: AppRoutes.transferencia,
                           titlePage: 'Transferência',
                           page: const TransferenciaPage(),
-                          // transitionType: AppTransitionType.CUSTOM_TRANSITION,
-                          // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
                         ),
                         NavigationRoute(
                           routeName: AppRoutes.pagamento,
                           titlePage: 'Pagamento',
                           page: const PagamentoPage(),
-                          // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
                         ),
                       ],
                     ),
@@ -77,15 +73,11 @@ class _HomePageState extends State<HomePage> {
                               routeName: AppRoutes.transferencia,
                               titlePage: 'Transferência',
                               page: const TransferenciaPage(),
-                              // transitionType: AppTransitionType.CUSTOM_TRANSITION,
-                              // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                              //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
                             ),
                             NavigationRoute(
                               routeName: AppRoutes.pagamento,
                               titlePage: 'Pagamento',
                               page: const PagamentoPage(),
-                              // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
                             ),
                           ],
                         );
