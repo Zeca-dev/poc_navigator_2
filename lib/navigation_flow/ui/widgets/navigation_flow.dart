@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../domain/navigation_route.dart';
@@ -85,6 +87,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
   late _NavigationFlowController _internalController;
   late NavigationRoute _initialRoute;
 
+  final isIOs = Platform.isIOS;
   bool _canPopRoot = true;
 
   @override
@@ -140,6 +143,8 @@ class _NavigationFlowState extends State<NavigationFlow> {
         if (didPop) {
           return;
         }
+
+        print('TESTE');
 
         _pop();
       },
@@ -210,7 +215,7 @@ class _NavigationFlowState extends State<NavigationFlow> {
             return MaterialPageRoute(
               settings: settings,
               builder: (context) => PopScope(
-                canPop: true,
+                canPop: isIOs,
                 onPopInvokedWithResult: (didPop, result) async {
                   if (didPop) {
                     if (_internalController.value.navigationRouteStack.length > 1) {
@@ -235,6 +240,10 @@ class _NavigationFlowState extends State<NavigationFlow> {
       Navigator.of(context).pop();
       return;
     } else {
+      if (!isIOs) {
+        _navigatorKey.currentState!.pop();
+        return;
+      }
       _internalController.removeFromStack();
     }
   }

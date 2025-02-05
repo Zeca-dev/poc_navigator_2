@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
 import 'package:poc_navigator_2/conta/cadastro_page.dart';
 import 'package:poc_navigator_2/conta/transferencia_page.dart';
 import 'package:poc_navigator_2/main.dart';
@@ -73,6 +72,12 @@ class _PagamentoPageState extends State<PagamentoPage> {
                 context.pushNamed(AppRoutes.pagamento);
               },
               child: const Text('Teste 2'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                NavigationFlow.backToRoute(AppRoutes.transferencia);
+              },
+              child: const Text('Voltar para a page 1'),
             ),
           ],
         ),

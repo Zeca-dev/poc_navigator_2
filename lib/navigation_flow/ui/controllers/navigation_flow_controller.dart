@@ -52,9 +52,6 @@ class _NavigationFlowController extends ValueNotifier<_NavigationState> {
   void removeRoutesUntil(String routeName) {
     value.navigatorKey?.currentState?.popUntil(
       (route) {
-        if (route.settings.name != routeName) {
-          removeFromStack();
-        }
         return route.settings.name == routeName;
       },
     );
