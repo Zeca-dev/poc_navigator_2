@@ -1,5 +1,7 @@
-import 'package:app_utils/app_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:poc_navigator_2/navigation_flow/domain/app_transitions.dart';
+
+import '../../domain/navigation_route.dart';
 
 part '../controllers/navigation_flow_controller.dart';
 
@@ -121,107 +123,118 @@ class _NavigationFlowState extends State<NavigationFlow> {
 
   @override
   Widget build(BuildContext context) {
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return PopScope(
-      canPop: false,
+      canPop: isIos,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) {
           return;
         }
 
-        if (_internalController.value.navigationRouteStack.length == 1) {
-          Navigator.of(context).pop();
-
-          return;
-        } else {
-          _internalController.removeFromStack();
-          _navigatorKey.currentState!.pop();
-        }
+        _pop();
       },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: !widget.appBarEnabled
-              ? null
-              : PreferredSize(
-                  preferredSize: Size(MediaQuery.sizeOf(context).width, 55),
-                  child: ValueListenableBuilder(
-                    valueListenable: _internalController,
-                    builder: (context, state, child) => AppBar(
-                      automaticallyImplyLeading: state.navigationRouteStack.length > 1,
-                      backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).primaryColor,
-                      foregroundColor: Theme.of(context).appBarTheme.foregroundColor ?? Colors.white,
-                      centerTitle: false,
-                      title: Text(state.navigationRouteStack.last.titlePage),
-                      actions: [
-                        IconButton(
-                          onPressed: () async {
-                            if (widget.onCloseMethod == null) {
-                              Navigator.of(context).pop();
-                              return;
-                            }
+      child: Scaffold(
+        appBar: !widget.appBarEnabled
+            ? null
+            : PreferredSize(
+                preferredSize: Size(MediaQuery.sizeOf(context).width, 55),
+                child: ValueListenableBuilder(
+                  valueListenable: _internalController,
+                  builder: (context, state, child) => AppBar(
+                    automaticallyImplyLeading: state.navigationRouteStack.length > 1,
+                    backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).primaryColor,
+                    foregroundColor: Theme.of(context).appBarTheme.foregroundColor ?? Colors.white,
+                    centerTitle: false,
+                    title: Text(state.navigationRouteStack.last.titlePage),
+                    leading: !isIos || _internalController.value.navigationRouteStack.length == 1
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.arrow_back_ios),
+                            onPressed: () {
+                              _pop();
+                            },
+                          ),
+                    actions: [
+                      IconButton(
+                        onPressed: () async {
+                          if (widget.onCloseMethod == null) {
+                            Navigator.of(context).pop();
+                            return;
+                          }
 
-                            final result = await widget.onCloseMethod!.call();
-                            if (result) {
-                              if (context.mounted) {
-                                Navigator.of(context).pop();
-                              }
+                          final result = await widget.onCloseMethod!.call();
+                          if (result) {
+                            if (context.mounted) {
+                              Navigator.of(context).pop();
                             }
-                          },
-                          icon: const Icon(Icons.close),
-                        ),
-                      ],
-                    ),
+                          }
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
                   ),
                 ),
+              ),
 
-          //
-          body: Navigator(
-            key: _navigatorKey,
-            initialRoute: _initialRoute.routeName,
-            onGenerateRoute: (settings) {
-              var route = settings.name;
-              Widget page;
+        //
+        body: Navigator(
+          key: _navigatorKey,
+          initialRoute: _initialRoute.routeName,
+          onGenerateRoute: (settings) {
+            var route = settings.name;
+            Widget page;
 
-              if (route == null) {
-                return null;
-              }
+            if (route == null) {
+              return null;
+            }
 
-              NavigationRoute? destinationRoute = _getRouteByName(route);
+            NavigationRoute? destinationRoute = _getRouteByName(route);
 
-              if (destinationRoute == null) {
-                return null;
-              }
+            if (destinationRoute == null) {
+              return null;
+            }
 
-              _internalController.addToStack(destinationRoute);
-              page = destinationRoute.page;
+            _internalController.addToStack(destinationRoute);
+            page = destinationRoute.page;
 
-              return switch (destinationRoute.transitionType) {
-                AppTransitionType.slideBottomToUp => SlideBottomToUp(
-                    settings: settings,
-                    page: page,
-                    duration: widget.transitionDuration,
-                  ),
-                AppTransitionType.slideRightToLeft => SlideRightToLeft(
-                    settings: settings,
-                    page: page,
-                    duration: widget.transitionDuration,
-                  ),
-                AppTransitionType.slideLeftToRight => SlideLeftToRight(
-                    settings: settings,
-                    page: page,
-                    duration: widget.transitionDuration,
-                  ),
-                AppTransitionType.customTransition => CustomTransition(
-                    settings: settings,
-                    page: page,
-                    duration: widget.transitionDuration,
-                    transition: destinationRoute.transitionsBuilder!,
-                  )
-              };
-            },
-          ),
+            return switch (destinationRoute.transitionType) {
+              AppTransitionType.SLIDE_BOTTOM_TO_UP => SlideBottomToUp(
+                  settings: settings,
+                  page: page,
+                  duration: widget.transitionDuration,
+                ),
+              AppTransitionType.SLIDE_RIGHT_TO_LEFT => SlideRightToLeft(
+                  settings: settings,
+                  page: page,
+                  duration: widget.transitionDuration,
+                ),
+              AppTransitionType.SLIDE_LEFT_TO_RIGHT => SlideLeftToRight(
+                  settings: settings,
+                  page: page,
+                  duration: widget.transitionDuration,
+                ),
+              AppTransitionType.CUSTOM_TRANSITION => CustomTransition(
+                  settings: settings,
+                  page: page,
+                  duration: widget.transitionDuration,
+                  transition: destinationRoute.transitionsBuilder!,
+                )
+            };
+          },
         ),
       ),
     );
+  }
+
+  void _pop() {
+    if (_internalController.value.navigationRouteStack.length == 1) {
+      Navigator.of(context).pop();
+
+      return;
+    } else {
+      _internalController.removeFromStack();
+      _navigatorKey.currentState!.pop();
+    }
   }
 }
 

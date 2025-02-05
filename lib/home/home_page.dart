@@ -24,34 +24,81 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Home'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            context.push(
-              SlideBottomToUp(
-                page: NavigationFlow(
-                  initialRoute: AppRoutes.cadastro,
-                  navigationRoutes: [
-                    NavigationRoute(routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),
-                    NavigationRoute(
-                      routeName: AppRoutes.transferencia,
-                      titlePage: 'Transferência',
-                      page: const TransferenciaPage(),
-                      // transitionType: AppTransitionType.CUSTOM_TRANSITION,
-                      // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                      //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                context.push(
+                  SlideBottomToUp(
+                    page: NavigationFlow(
+                      initialRoute: AppRoutes.cadastro,
+                      navigationRoutes: [
+                        NavigationRoute(
+                            routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),
+                        NavigationRoute(
+                          routeName: AppRoutes.transferencia,
+                          titlePage: 'Transferência',
+                          page: const TransferenciaPage(),
+                          // transitionType: AppTransitionType.CUSTOM_TRANSITION,
+                          // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                          //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
+                        ),
+                        NavigationRoute(
+                          routeName: AppRoutes.pagamento,
+                          titlePage: 'Pagamento',
+                          page: const PagamentoPage(),
+                          // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
+                        ),
+                      ],
                     ),
-                    NavigationRoute(
-                      routeName: AppRoutes.pagamento,
-                      titlePage: 'Pagamento',
-                      page: const PagamentoPage(),
-                      // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-          child: const Text('Ir para Conta corrente'),
+                  ),
+                );
+              },
+              child: const Text('Ir para Conta corrente'),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  context.push(MaterialPageRoute(
+                    builder: (context) {
+                      return Container(
+                        color: Colors.red,
+                      );
+                    },
+                  ));
+                },
+                child: const Text('Novo')),
+            ElevatedButton(
+                onPressed: () {
+                  context.push(SlideRightToLeft(
+                      page: NavigationFlow(
+                    initialRoute: AppRoutes.cadastro,
+                    navigationRoutes: [
+                      NavigationRoute(routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),
+                      NavigationRoute(
+                        routeName: AppRoutes.transferencia,
+                        titlePage: 'Transferência',
+                        page: const TransferenciaPage(),
+                        // transitionType: AppTransitionType.CUSTOM_TRANSITION,
+                        // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                        //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
+                      ),
+                      NavigationRoute(
+                        routeName: AppRoutes.pagamento,
+                        titlePage: 'Pagamento',
+                        page: const PagamentoPage(),
+                        // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
+                      ),
+                    ],
+                  )));
+                },
+                child: const Text('Novo 2')),
+            ElevatedButton(
+                onPressed: () {
+                  context.pushNamed(AppRoutes.flow);
+                },
+                child: const Text('NOVO 3'))
+          ],
         ),
       ),
     );
