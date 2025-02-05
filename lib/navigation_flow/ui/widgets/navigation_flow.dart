@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:poc_navigator_2/navigation_flow/domain/app_transitions.dart';
 
 import '../../domain/navigation_route.dart';
 
@@ -86,6 +85,8 @@ class _NavigationFlowState extends State<NavigationFlow> {
   late _NavigationFlowController _internalController;
   late NavigationRoute _initialRoute;
 
+  bool _canPopRoot = true;
+
   @override
   void initState() {
     final controller = _NavigationFlowController();
@@ -99,7 +100,17 @@ class _NavigationFlowState extends State<NavigationFlow> {
     _initialRoute = _getRouteByName(_getInitialRouteName()) ?? widget.navigationRoutes.first;
     _internalController.setTitlePage(_initialRoute.titlePage);
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _internalController.addListener(_enableRootCanPop);
+    });
+
     super.initState();
+  }
+
+  void _enableRootCanPop() {
+    setState(() {
+      _canPopRoot = _internalController.value.navigationRouteStack.length == 1;
+    });
   }
 
   @override
@@ -123,9 +134,8 @@ class _NavigationFlowState extends State<NavigationFlow> {
 
   @override
   Widget build(BuildContext context) {
-    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return PopScope(
-      canPop: isIos,
+      canPop: _canPopRoot,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) {
           return;
@@ -146,12 +156,12 @@ class _NavigationFlowState extends State<NavigationFlow> {
                     foregroundColor: Theme.of(context).appBarTheme.foregroundColor ?? Colors.white,
                     centerTitle: false,
                     title: Text(state.navigationRouteStack.last.titlePage),
-                    leading: !isIos || _internalController.value.navigationRouteStack.length == 1
+                    leading: _canPopRoot
                         ? null
                         : IconButton(
                             icon: const Icon(Icons.arrow_back_ios),
                             onPressed: () {
-                              _pop();
+                              _navigatorKey.currentState!.pop();
                             },
                           ),
                     actions: [
@@ -197,29 +207,23 @@ class _NavigationFlowState extends State<NavigationFlow> {
             _internalController.addToStack(destinationRoute);
             page = destinationRoute.page;
 
-            return switch (destinationRoute.transitionType) {
-              AppTransitionType.slideBottomToUp => SlideBottomToUp(
-                  settings: settings,
-                  page: page,
-                  duration: widget.transitionDuration,
-                ),
-              AppTransitionType.slideRightToLeft => SlideRightToLeft(
-                  settings: settings,
-                  page: page,
-                  duration: widget.transitionDuration,
-                ),
-              AppTransitionType.slideLeftToRight => SlideLeftToRight(
-                  settings: settings,
-                  page: page,
-                  duration: widget.transitionDuration,
-                ),
-              AppTransitionType.customTransition => CustomTransition(
-                  settings: settings,
-                  page: page,
-                  duration: widget.transitionDuration,
-                  transition: destinationRoute.transitionsBuilder!,
-                )
-            };
+            return MaterialPageRoute(
+              settings: settings,
+              builder: (context) => PopScope(
+                canPop: true,
+                onPopInvokedWithResult: (didPop, result) async {
+                  if (didPop) {
+                    if (_internalController.value.navigationRouteStack.length > 1) {
+                      _internalController.removeFromStack();
+                    }
+                    return;
+                  }
+
+                  _pop();
+                },
+                child: page,
+              ),
+            );
           },
         ),
       ),
@@ -227,13 +231,11 @@ class _NavigationFlowState extends State<NavigationFlow> {
   }
 
   void _pop() {
-    if (_internalController.value.navigationRouteStack.length == 1) {
+    if (_canPopRoot) {
       Navigator.of(context).pop();
-
       return;
     } else {
       _internalController.removeFromStack();
-      _navigatorKey.currentState!.pop();
     }
   }
 }

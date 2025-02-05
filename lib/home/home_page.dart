@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 40,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -70,34 +71,69 @@ class _HomePageState extends State<HomePage> {
                 child: const Text('Novo')),
             ElevatedButton(
                 onPressed: () {
-                  context.push(SlideRightToLeft(
-                      page: NavigationFlow(
-                    initialRoute: AppRoutes.cadastro,
-                    navigationRoutes: [
-                      NavigationRoute(routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),
-                      NavigationRoute(
-                        routeName: AppRoutes.transferencia,
-                        titlePage: 'Transferência',
-                        page: const TransferenciaPage(),
-                        // transitionType: AppTransitionType.CUSTOM_TRANSITION,
-                        // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                        //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
+                  context.push(
+                      SlideRightToLeft(
+                        page: NavigationFlow(
+                          initialRoute: AppRoutes.cadastro,
+                          navigationRoutes: [
+                            NavigationRoute(
+                                routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),
+                            NavigationRoute(
+                              routeName: AppRoutes.transferencia,
+                              titlePage: 'Transferência',
+                              page: const TransferenciaPage(),
+                              // transitionType: AppTransitionType.CUSTOM_TRANSITION,
+                              // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                              //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
+                            ),
+                            NavigationRoute(
+                              routeName: AppRoutes.pagamento,
+                              titlePage: 'Pagamento',
+                              page: const PagamentoPage(),
+                              // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
+                            ),
+                          ],
+                        ),
                       ),
-                      NavigationRoute(
-                        routeName: AppRoutes.pagamento,
-                        titlePage: 'Pagamento',
-                        page: const PagamentoPage(),
-                        // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
-                      ),
-                    ],
-                  )));
+                      rootNavigator: true);
                 },
                 child: const Text('Novo 2')),
             ElevatedButton(
                 onPressed: () {
                   context.pushNamed(AppRoutes.flow);
                 },
-                child: const Text('NOVO 3'))
+                child: const Text('NOVO 3')),
+            ElevatedButton(
+                onPressed: () {
+                  context.push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return NavigationFlow(
+                          initialRoute: AppRoutes.cadastro,
+                          navigationRoutes: [
+                            NavigationRoute(
+                                routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),
+                            NavigationRoute(
+                              routeName: AppRoutes.transferencia,
+                              titlePage: 'Transferência',
+                              page: const TransferenciaPage(),
+                              // transitionType: AppTransitionType.CUSTOM_TRANSITION,
+                              // transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                              //     FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child),
+                            ),
+                            NavigationRoute(
+                              routeName: AppRoutes.pagamento,
+                              titlePage: 'Pagamento',
+                              page: const PagamentoPage(),
+                              // transitionType: AppTransitionType.SLIDE_LEFT_TO_RIGHT,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: const Text('NOVO 4'))
           ],
         ),
       ),
