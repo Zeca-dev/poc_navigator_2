@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../domain/app_transitions.dart';
 import '../../domain/navigation_route.dart';
 
 part '../controllers/navigation_flow_controller.dart';
@@ -16,6 +17,7 @@ class NavigationFlow extends StatefulWidget {
     super.key,
     this.appBarEnabled = true,
     this.initialRoute,
+    this.allowPopbackGesture = true,
     required this.navigationRoutes,
     this.transitionDuration = const Duration(milliseconds: 300),
     this.onCloseMethod,
@@ -40,6 +42,11 @@ class NavigationFlow extends StatefulWidget {
   /// Valor default: `Duration(miliseconds: 300)`
   ///
   final Duration transitionDuration;
+
+  /// Permitir gesto de voltar nas rotas.
+  ///
+  /// Default: true
+  final bool allowPopbackGesture;
 
   ///Controlador de estado do fluxo de navegação.
   /// Contém uma `navigationRouteStack` que guarda as rotas
@@ -138,13 +145,11 @@ class _NavigationFlowState extends State<NavigationFlow> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: _canPopRoot,
+      canPop: _canPopRoot && widget.allowPopbackGesture,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) {
           return;
         }
-
-        print('TESTE');
 
         _pop();
       },
@@ -212,23 +217,42 @@ class _NavigationFlowState extends State<NavigationFlow> {
             _internalController.addToStack(destinationRoute);
             page = destinationRoute.page;
 
-            return MaterialPageRoute(
-              settings: settings,
-              builder: (context) => PopScope(
-                canPop: isIOs,
-                onPopInvokedWithResult: (didPop, result) async {
-                  if (didPop) {
-                    if (_internalController.value.navigationRouteStack.length > 1) {
-                      _internalController.removeFromStack();
-                    }
-                    return;
-                  }
+            return switch (Platform.isAndroid) {
+              true => SlideRightToLeft(
+                  settings: settings,
+                  page: PopScope(
+                    canPop: widget.allowPopbackGesture,
+                    onPopInvokedWithResult: (didPop, result) async {
+                      if (didPop) {
+                        if (_internalController.value.navigationRouteStack.length > 1) {
+                          _internalController.removeFromStack();
+                        }
+                        return;
+                      }
 
-                  _pop();
-                },
-                child: page,
-              ),
-            );
+                      _pop();
+                    },
+                    child: page,
+                  ),
+                ),
+              false => MaterialPageRoute(
+                  settings: settings,
+                  builder: (context) => PopScope(
+                    canPop: widget.allowPopbackGesture,
+                    onPopInvokedWithResult: (didPop, result) async {
+                      if (didPop) {
+                        if (_internalController.value.navigationRouteStack.length > 1) {
+                          _internalController.removeFromStack();
+                        }
+                        return;
+                      }
+
+                      _pop();
+                    },
+                    child: page,
+                  ),
+                ),
+            };
           },
         ),
       ),

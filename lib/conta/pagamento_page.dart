@@ -75,7 +75,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                NavigationFlow.backToRoute(AppRoutes.transferencia);
+                NavigationFlow.backToRoute(AppRoutes.cadastro);
               },
               child: const Text('Voltar para a page 1'),
             ),
