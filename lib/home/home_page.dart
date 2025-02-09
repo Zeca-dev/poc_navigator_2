@@ -15,6 +15,10 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+void teste() {
+  print('teste');
+}
+
 class _HomePageState extends State<HomePage> {
   final titleController = TextEditingController();
   @override
@@ -66,7 +70,6 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) {
                         return NavigationFlow(
                           initialRoute: AppRoutes.cadastro,
-                          allowPopbackGesture: false,
                           navigationRoutes: [
                             NavigationRoute(
                                 routeName: AppRoutes.cadastro, titlePage: 'Cadastro', page: const CadastroPage()),

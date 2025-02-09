@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.poc_navigator_2"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion  flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
